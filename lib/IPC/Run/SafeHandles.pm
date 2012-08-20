@@ -3,6 +3,7 @@ package IPC::Run::SafeHandles;
 use warnings;
 use strict;
 use IO::Handle ();
+use List::MoreUtils 'any';
 
 =head1 NAME
 
@@ -10,7 +11,7 @@ IPC::Run::SafeHandles - Use IPC::Run and IPC::Run3 safely
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head1 SYNOPSIS
 
@@ -43,7 +44,8 @@ sub _wrap_it {
 
     my $wrapper = sub {
 
-        goto &$original unless $ENV{FCGI_ROLE};
+        goto &$original unless $ENV{FCGI_ROLE}
+            || any { $_ eq 'via'} PerlIO::get_layers(*STDOUT), PerlIO::get_layers(*STDERR);
 
 	my $stdout = IO::Handle->new;
 	$stdout->fdopen( 1, 'w' );

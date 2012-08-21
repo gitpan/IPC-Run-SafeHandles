@@ -8,6 +8,7 @@ license     ('perl');
 name        ('IPC-Run-SafeHandles');
 all_from    ('lib/IPC/Run/SafeHandles.pm');
 requires    ('Test::More');
+requires    ('List::MoreUtils');
 
 auto_install;
 WriteAll;
